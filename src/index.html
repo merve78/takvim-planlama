@@ -6,15 +6,27 @@
   <title>Haftalık Takvim</title>
   <script src="https://cdn.tailwindcss.com"></script>
 </head>
-<body class="bg-gray-100 h-screen w-screen flex flex-col items-center justify-center p-4">
-  <div class="w-full max-w-7xl">
+<body>
+<header class="bg-white px-10 py-6"> <!-- NAVBAR KISMI YAPILACAK KISIM-->
+   <div class="flex justify-between items-center ">
+      <div class="text-black font-serif text-2xl tracking-widest"><h1>PLANLAMA 2025-26 </h1></div>
+      <div class="flex justify-between gap-4 items-center">
+          <div><a href="1"><img src="images/img-1.jpg" alt="kişi logosu" class="h-10"></a></div>
+          <div><a href="2"><img src="images/img-2.png" alt="kişi logosu" class="h-10"></a></div>
+     </div>
+   </div>
+</header>
+<!--TAKVİM KISMI-->
+<section class="bg-[#dee676] h-screen w-screen flex flex-col items-center justify-center p-4">
+
+   <div class="w-full max-w-7xl">
     <!-- Header -->
     <div class="flex justify-between items-center mb-4">
-      <button id="prevWeek" class="text-2xl px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 select-none">
+      <button id="prevWeek" class="text-2xl px-4 py-2 bg-[#dee676] text-white rounded select-none">
         ◀
       </button>
       <h1 id="weekLabel" class="text-2xl font-bold select-none">Bu Hafta</h1>
-      <button id="nextWeek" class="text-2xl px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 select-none">
+      <button id="nextWeek" class="text-2xl px-4 py-2 bg-[#dee676] text-white rounded select-none">
         ▶
       </button>
     </div>
@@ -178,5 +190,7 @@
     fillAllDaysHours();
     updateDates(currentDate);
   </script>
+</section>
+ 
 </body>
 </html>
