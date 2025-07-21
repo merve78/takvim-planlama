@@ -1,0 +1,229 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Kişi Formu ve Sekmeler</title>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    body {
+      margin: 0;
+      font-family: 'Inter', sans-serif;
+      
+    }
+    .content {
+      width: 100%;
+      padding: 10px 20px;
+      text-align: right;
+      position: fixed;
+      top: 0;
+      left: 0;
+    }
+    #btnKisi {
+      background: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 40px;
+      height: 40px;
+      font-size: 20px;
+      cursor: pointer;
+    }
+    .form-container {
+      display: none;
+      background: rgba(255, 255, 255, 0.97);
+      padding: 25px;
+      border-radius: 10px;
+      box-shadow: 0 6px 12px rgba(0, 0, 0, 0.4);
+      width: 320px;
+      text-align: center;
+      
+    }
+    .form-container h2 {
+      margin-bottom: 15px;
+    }
+    .form-container input {
+      width: 100%;
+      margin: 8px 0;
+      padding: 12px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+      font-size: 14px;
+    }
+    .btn-primary,
+    .btn-outline {
+      width: 100%;
+      padding: 12px;
+      margin-top: 10px;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+      font-size: 15px;
+    }
+    .btn-primary {
+      background-color: #0a1f44;
+      color: #fff;
+    }
+    .btn-outline {
+      background-color: #fff;
+      border: 1px solid #ccc;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+    .btn-outline img {
+      width: 18px;
+      height: 18px;
+      object-fit: contain;
+    }
+    .tabs {
+      display: none;
+      background: rgba(255, 255, 255, 0.97);
+      padding: 20px;
+      margin-top: 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.3);
+      width: 400px;
+    }
+    .tab-buttons button {
+      margin: 5px;
+      padding: 10px 15px;
+      background-color: #0a1f44;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+    .forgot-details {
+      display: none;
+      margin-top: 10px;
+      font-size: 14px;
+      background: #f8f8f8;
+      padding: 8px;
+      border-radius: 6px;
+    }
+    .forgot-details input {
+      width: 100%;
+      margin: 5px 0;
+      padding: 8px;
+      border-radius: 4px;
+      border: 1px solid #ccc;
+    }
+    .forgot-details button {
+      width: 100%;
+      padding: 8px;
+      margin-top: 5px;
+      background-color: #0a1f44;
+      color: #fff;
+      border: none;
+      border-radius: 4px;
+      cursor: pointer;
+    }
+  </style>
+</head>
+<body>
+
+<div id="content"> 
+    <button id="btnKisi">👤</button>
+ 
+
+  <div class="form-container" id="formContainer">
+    <h2>Tekrar Hoş Geldin!</h2>
+    <form id="loginForm">
+      <input type="email" placeholder="E-posta" required />
+      <input type="password" placeholder="Şifre" required />
+      <div class="forgot">
+        <a href="#" id="forgotLink">Şifreni mi unuttun?</a>
+        <div class="forgot-details" id="forgotDetails">
+          <input type="email" id="forgotEmail" placeholder="E-posta adresinizi girin" />
+          <input type="tel" id="forgotGsm" placeholder="GSM numaranızı girin" />
+          <button type="button" id="resetPassword">Şifre Sıfırla</button>
+        </div>
+      </div>
+      <button class="btn-primary" type="submit">Giriş Yap</button>
+      <button class="btn-outline" id="googleLogin" type="button">
+        <img src="https://www.gstatic.com/images/branding/product/1x/gsa_64dp.png" alt="Google Logo" /> Google ile giriş yap
+      </button>
+      <button class="btn-outline" id="appleLogin" type="button">
+        <img src="https://upload.wikimedia.org/wikipedia/commons/f/fa/Apple_logo_black.svg" alt="Apple Logo" /> Apple ile giriş yap
+      </button>
+    </form>
+  </div>
+
+  <div class="tabs" id="tabsContainer">
+    <div class="tab-buttons">
+      <button data-tab="1">Sekme 1</button>
+      <button data-tab="2">Sekme 2</button>
+      <button data-tab="3">Sekme 3</button>
+    </div>
+    <div class="tab-content" id="tabContent">
+      Sekme içeriği burada görünecek.
+    </div>
+  </div>
+</div>
+  <script>
+    const btnKisi = document.getElementById('btnKisi');
+    const formContainer = document.getElementById('formContainer');
+    const loginForm = document.getElementById('loginForm');
+    const tabsContainer = document.getElementById('tabsContainer');
+    const tabButtons = document.querySelectorAll('.tab-buttons button');
+    const tabContent = document.getElementById('tabContent');
+    const googleLogin = document.getElementById('googleLogin');
+    const appleLogin = document.getElementById('appleLogin');
+    const forgotLink = document.getElementById('forgotLink');
+    const forgotDetails = document.getElementById('forgotDetails');
+    const resetPassword = document.getElementById('resetPassword');
+
+    btnKisi.addEventListener('click', () => {
+      formContainer.style.display = 'block';
+      tabsContainer.style.display = 'none';
+    });
+
+    loginForm.addEventListener('submit', (e) => {
+      e.preventDefault();
+      formContainer.style.display = 'none';
+      tabsContainer.style.display = 'block';
+    });
+
+    googleLogin.addEventListener('click', () => {
+      window.open('https://accounts.google.com/signin', '_blank');
+    });
+    appleLogin.addEventListener('click', () => {
+      window.open('https://account.apple.com/sign-in', '_blank');
+    });
+
+    tabButtons.forEach((button) => {
+      button.addEventListener('click', () => {
+        tabContent.innerHTML = `${button.dataset.tab}. sekmenin içeriği burada!`;
+      });
+    });
+
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      forgotDetails.style.display =
+        forgotDetails.style.display === 'block' ? 'none' : 'block';
+    });
+
+    resetPassword.addEventListener('click', () => {
+      const eposta = document.getElementById('forgotEmail').value.trim();
+      const gsm = document.getElementById('forgotGsm').value.trim();
+      if (!eposta && !gsm) {
+        alert('Lütfen e-posta veya GSM girin.');
+        return;
+      }
+      alert('Şifre sıfırlama isteği alındı!');
+      forgotDetails.style.display = 'none';
+    });
+
+    document.addEventListener('click', function (e) {
+  const isClickInsideForm = formContainer.contains(e.target);
+  const isClickOnButton = btnKisi.contains(e.target);
+
+  if (!isClickInsideForm && !isClickOnButton) {
+    formContainer.style.display = 'none';
+  }
+});
+
+  </script>
+</body>
+</html>
