@@ -1,0 +1,182 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Haftalık Takvim</title>
+  <script src="https://cdn.tailwindcss.com"></script>
+</head>
+<body class="bg-gray-100 h-screen w-screen flex flex-col items-center justify-center p-4">
+  <div class="w-full max-w-7xl">
+    <!-- Header -->
+    <div class="flex justify-between items-center mb-4">
+      <button id="prevWeek" class="text-2xl px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 select-none">
+        ◀
+      </button>
+      <h1 id="weekLabel" class="text-2xl font-bold select-none">Bu Hafta</h1>
+      <button id="nextWeek" class="text-2xl px-4 py-2 bg-blue-600 text-white rounded hover:bg-blue-700 select-none">
+        ▶
+      </button>
+    </div>
+
+    <!-- Günler -->
+    <div id="weekContainer" class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-4 lg:grid-cols-7 gap-4 h-[75vh] overflow-auto">
+      <!-- Gün kutuları elle yazıldı, JS ile tarih güncellenecek -->
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Pazartesi</h2>
+        <p id="date-mon" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1">
+          <!-- Saat satırları -->
+          <!-- 24 satır input -->
+          <template id="hour-template">
+            <div class="py-1 px-2 border-b flex items-center gap-2">
+              <span class="w-12 text-sm text-gray-600 select-none">00:00</span>
+              <input type="text" class="todo-input flex-1 text-sm p-1 border rounded" placeholder="Yapılacak iş..." />
+            </div>
+          </template>
+        </div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Salı</h2>
+        <p id="date-tue" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1"></div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Çarşamba</h2>
+        <p id="date-wed" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1"></div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Perşembe</h2>
+        <p id="date-thu" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1"></div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Cuma</h2>
+        <p id="date-fri" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1"></div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Cumartesi</h2>
+        <p id="date-sat" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1"></div>
+      </div>
+
+      <div class="bg-white p-4 rounded-lg shadow flex flex-col">
+        <h2 class="font-semibold text-lg text-center select-none">Pazar</h2>
+        <p id="date-sun" class="text-sm text-gray-600 mb-2 text-center select-none">Tarih</p>
+        <div class="bg-gray-50 rounded border divide-y overflow-y-auto flex-1"></div>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    // Haftanın gün id'leri
+    const dayIds = [
+      "date-mon", "date-tue", "date-wed", "date-thu", "date-fri", "date-sat", "date-sun"
+    ];
+
+    // Gün adları sabit (Elle HTML içinde yazıldı)
+    const days = ['Pazartesi', 'Salı', 'Çarşamba', 'Perşembe', 'Cuma', 'Cumartesi', 'Pazar'];
+
+    const weekLabel = document.getElementById('weekLabel');
+    const prevWeekBtn = document.getElementById('prevWeek');
+    const nextWeekBtn = document.getElementById('nextWeek');
+    const weekContainer = document.getElementById('weekContainer');
+
+    // Başlangıç tarih (bugün)
+    let currentDate = new Date();
+
+    // Saat satırı template'i (ilk gün için HTML içinde var)
+    const hourTemplate = document.getElementById('hour-template').content;
+
+    // Haftanın başını Pazartesi yapar
+    function getStartOfWeek(date) {
+      const day = date.getDay();
+      const diff = day === 0 ? -6 : 1 - day;
+      const start = new Date(date);
+      start.setHours(0,0,0,0);
+      start.setDate(date.getDate() + diff);
+      return start;
+    }
+
+    // Tarih formatı: 22 Tem
+    function formatDate(date) {
+      return date.toLocaleDateString('tr-TR', { day: 'numeric', month: 'short' });
+    }
+
+    // Haftanın tüm saat satırlarını ilgili gün kutularına kopyala (ilk sayfa yüklendiğinde)
+    function fillAllDaysHours() {
+      // İlk gün için zaten var (index 0)
+      const firstDayDiv = weekContainer.children[0];
+      const firstDayHoursContainer = firstDayDiv.querySelector('div.bg-gray-50');
+      
+      // Diğer 6 güne saat satırı kopyala
+      for(let i = 0; i < 7; i++) {
+        const dayDiv = weekContainer.children[i];
+        const container = dayDiv.querySelector('div.bg-gray-50');
+        container.innerHTML = ''; // temizle
+        
+        // 24 saat satırını oluştur
+        for(let h=0; h<24; h++) {
+          const clone = hourTemplate.cloneNode(true);
+          const span = clone.querySelector('span');
+          span.textContent = h.toString().padStart(2,'0') + ':00';
+          container.appendChild(clone);
+        }
+      }
+      
+      // İlk gün için de saatleri ayarla (zaten template var)
+      if(firstDayHoursContainer.children.length === 0) {
+        for(let h=0; h<24; h++) {
+          const clone = hourTemplate.cloneNode(true);
+          const span = clone.querySelector('span');
+          span.textContent = h.toString().padStart(2,'0') + ':00';
+          firstDayHoursContainer.appendChild(clone);
+        }
+      }
+    }
+
+    // Tarihleri ve haftalık başlığı güncelle, yapılacakları temizle
+    function updateDates(date) {
+      const startOfWeek = getStartOfWeek(date);
+      for(let i=0; i<7; i++) {
+        const current = new Date(startOfWeek);
+        current.setDate(current.getDate() + i);
+        const dateElement = document.getElementById(dayIds[i]);
+        if(dateElement) {
+          dateElement.textContent = formatDate(current);
+        }
+      }
+
+      // Haftalık başlık
+      const weekStart = formatDate(startOfWeek);
+      const weekEnd = formatDate(new Date(startOfWeek.getTime() + 6*86400000));
+      weekLabel.textContent = `${weekStart} - ${weekEnd}`;
+
+      // Yapılacaklar listesini temizle
+      const inputs = document.querySelectorAll('.todo-input');
+      inputs.forEach(input => input.value = '');
+    }
+
+    prevWeekBtn.addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() - 7);
+      updateDates(currentDate);
+    });
+
+    nextWeekBtn.addEventListener('click', () => {
+      currentDate.setDate(currentDate.getDate() + 7);
+      updateDates(currentDate);
+    });
+
+    // Sayfa açılırken:
+    fillAllDaysHours();
+    updateDates(currentDate);
+  </script>
+</body>
+</html>
