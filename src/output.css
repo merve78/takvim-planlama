@@ -227,6 +227,12 @@
   .h-\[75vh\] {
     height: 75vh;
   }
+  .h-\[80vh\] {
+    height: 80vh;
+  }
+  .h-\[90vh\] {
+    height: 90vh;
+  }
   .h-screen {
     height: 100vh;
   }
@@ -338,6 +344,9 @@
   }
   .p-1 {
     padding: calc(var(--spacing) * 1);
+  }
+  .p-2 {
+    padding: calc(var(--spacing) * 2);
   }
   .p-4 {
     padding: calc(var(--spacing) * 4);

@@ -5,6 +5,102 @@
   <meta name="viewport" content="width=device-width, initial-scale=1" />
   <title>Haftalık Takvim</title>
   <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: white;
+  
+    }
+
+    .menu-container {
+      position: relative;
+    }
+
+    .menu-button {
+      font-size: 20px;
+      border: none;
+      background-color: #BE9CF3;
+      color: black;
+      padding: 6px;
+      border-radius: 50%;
+      cursor: pointer;
+      width: 40px;
+      height: 40px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .dropdown-menu {
+      display: none;
+      position: absolute;
+      top: 60px;
+      right: 0;
+      background: white;
+      border: 1px solid #222;
+      border-radius: 6px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      width: 200px;
+      z-index: 1000;
+    }
+
+    .dropdown-menu.show {
+      display: block;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 10px 15px;
+      background: none;
+      border: none;
+      width: 100%;
+      box-sizing: border-box;
+      cursor: pointer;
+      font-size: 14px;
+      color: black;
+      text-decoration: none;
+    }
+
+    .menu-link span {
+      flex-grow: 1;
+      text-align: left;
+    }
+
+    .menu-link i {
+      font-size: 16px;
+      color: black;
+      margin-left: 10px;
+    }
+
+    .lang-menu {
+      display: none;
+      background: #fff;
+      border-top: 1px solid #eee;
+    }
+
+    .lang-menu.show {
+      display: block;
+    }
+
+    .lang-option {
+      padding: 8px 15px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      cursor: pointer;
+      color: black;
+    }
+
+    .lang-option:hover {
+      background-color: #f5f5f5;
+    }
+
+    .lang-option .icon {
+      flex-shrink: 0;
+    }
+  </style>
 </head>
 <body>
   
@@ -13,15 +109,59 @@
       <div class="text-black font-serif text-2xl tracking-widest"><h1>📔PLANLAMA 2025-26 </h1></div>
       <div class="flex justify-between gap-4 items-center">
           <div><a href="1"><img src="images/img-1.jpg" alt="kişi logosu" class="h-10"></a></div>
-          <div><a href="2"><img src="images/img-2.png" alt="kişi logosu" class="h-10"></a></div>
+          <div>
+                 <div class="menu-container h-10">
+                 <button class="menu-button" id="menuBtn">⋮</button>
+                 <div class="dropdown-menu" id="dropdownMenu">
+                 <a href="#" class="menu-link"><span>Hakkımızda</span></a>
+                 <a href="#" class="menu-link"><span>Yazdır</span><i class="fa-solid fa-print"></i></a>
+                 <a href="#" class="menu-link"><span>Paylaş</span><i class="fa-solid fa-paper-plane"></i></a>
+                 <a href="#" class="menu-link"><span>Premium'a Geç</span></a>
+                 <a href="#" class="menu-link"><span>Destek</span></a>
+                 <button id="langToggle" class="menu-link"><span>Diller</span><i class="fa-solid fa-earth-europe"></i></button>
+
+                 <div class="lang-menu" id="langMenu">
+                 <div class="lang-option"><span class="icon"><i class="fa-solid fa-earth-europe"></i></span> English</div>
+                 <div class="lang-option"><span class="icon"><i class="fa-solid fa-earth-europe"></i></span> Deutsch</div>
+                 <div class="lang-option"><span class="icon"><i class="fa-solid fa-earth-europe"></i></span> Español</div>
+                 <div class="lang-option"><span class="icon"><i class="fa-solid fa-earth-europe"></i></span> Français</div>
+                 <div class="lang-option"><span class="icon"><i class="fa-solid fa-earth-europe"></i></span> Italiano</div>
+                 <div class="lang-option"><span class="icon"><i class="fa-solid fa-earth-europe"></i></span> Türkçe</div>
+               </div>
+             </div>
+            </div>
+          </div>
      </div>
    </div>
 </header>
+<script>
+    const menuBtn = document.getElementById('menuBtn');
+    const dropdownMenu = document.getElementById('dropdownMenu');
+    const langToggle = document.getElementById('langToggle');
+    const langMenu = document.getElementById('langMenu');
+
+    menuBtn.addEventListener('click', () => {
+      dropdownMenu.classList.toggle('show');
+      langMenu.classList.remove('show');
+    });
+
+    langToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      langMenu.classList.toggle('show');
+    });
+
+    window.addEventListener('click', (e) => {
+      if (!dropdownMenu.contains(e.target) && !menuBtn.contains(e.target)) {
+        dropdownMenu.classList.remove('show');
+        langMenu.classList.remove('show');
+      }
+    });
+  </script>
 <!--TAKVİM KISMI-->
 <section class="bg-[#dee676] h-screen w-screen flex flex-col items-center justify-center p-4">
 
    <div class="w-full max-w-7xl">
-    <!-- Header -->
+    <!-- buton kısmı-->
     <div class="flex justify-between items-center mb-4">
       <button id="prevWeek" class="text-2xl px-4 py-2 bg-[#dee676] text-white rounded select-none">
         ◀
